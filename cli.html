@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="shortcut icon" href="terminal.png" type="image/x-icon">
+    <title>CLI</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            background-image: url('terminal-bg.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        #terminal {
+            animation-name: open;
+            animation-duration: 2s;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            color: white;
+            font-family: Consolas;
+            line-height: 1.5;
+            border-radius: 20px;
+            border: 5px solid greenyellow;
+            overflow: auto;
+            scrollbar-width: none;
+            min-width: 40rem;
+            height: 20rem;
+            margin-top: 5rem;
+            padding-right: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        @keyframes open {
+            from {
+                opacity: 0;
+                scale: 0.1;
+
+            }
+
+            to {
+                opacity: 1;
+                scale: 1.0;
+            }
+        }
+
+        #input {
+            background-color: transparent;
+            color: white;
+            font-size: 15px;
+            border: none;
+            width: 80%;
+            outline: none;
+            font-family: Consolas;
+            margin-left: 0.5rem;
+        }
+
+        .prompt {
+            color: white;
+        }
+
+        .head-img {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .head {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        hr {
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .main {
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            color: whitesmoke;
+        }
+
+        .nav-icon img {
+            margin: 2px;
+            display: flex;
+            align-items: center;
+            height: 20px;
+            transition-duration: 300ms;
+        }
+
+        .hRight,
+        .hLeft {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-icon img:hover {
+            scale: 1.05;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="terminal">
+        <div class="head">
+            <div class="hLeft">
+                <img src="terminal.png" class="head-img">&nbsp;
+                <p>CLI - Terminal</p>
+            </div>
+            <div class="hRight">
+                <div class="nav-icon" onclick="minimizeWindow()"><img src="minimize.svg">
+                </div>
+                <div class="nav-icon" onclick="maximizeWindow()"><img src="maximize.svg">
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="main">
+            <div>Command Line Interface (Type "help" for guide)</div>
+            <div class="prompt">root:&gt;<input type="text" id="input" autofocus autocomplete="off"></div>
+        </div>
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const input = document.getElementById('input');
+
+        const commands = {
+            help: () => 'Available commands: help, date, time, clear',
+            clear: () => { location.reload(); },
+            time: () => new Date().toLocaleTimeString(),
+            date: () => new Date().toLocaleDateString()
+        };
+
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                const commandLine = input.value.trim();
+                const parts = commandLine.split(' ');
+                const command = parts[0].toLowerCase();
+                const args = parts.slice(1);
+
+                let output;
+                if (commands[command]) {
+                    output = commands[command](args);
+                } else if (input.value.trim() === '') {
+                    output = '';
+                }
+                else {
+                    output = `'${command}' is not a recognized command.`;
+                }
+
+                const prompt = document.querySelector('.prompt');
+                prompt.insertAdjacentHTML('beforebegin', `root:&gt; ${commandLine}<br>${output ? output + '<br>' : ''}`);
+
+                input.value = '';
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+
+        function maximizeWindow() {
+            let window = terminal;
+            window.style.width = "100vw";
+            window.style.height = "98vh";
+            window.style.margin = "0";
+
+        }
+
+        function minimizeWindow() {
+            let window = terminal;
+            window.style.width = "40rem";
+            window.style.height = "20rem";
+            window.style.marginTop = "5rem";
+        }
+    </script>
+</body>
+
+</html>
