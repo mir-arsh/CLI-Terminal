@@ -3,7 +3,7 @@
 
 <head>
     <link rel="shortcut icon" href="terminal.png" type="image/x-icon">
-    <title>CLI</title>
+    <title>Command Line Interface</title>
     <style>
         body {
             background-color: black;
@@ -126,8 +126,8 @@
         </div>
         <hr>
         <div class="main">
-            <div>Command Line Interface (Type "help" for guide)</div>
-            <div class="prompt">root:&gt;<input type="text" id="input" autofocus autocomplete="off"></div>
+            <div>Command Line Interface (Input "help" for guide!)</div>
+            <div class="prompt">$:&gt;<input type="text" id="input" autofocus autocomplete="off"></div>
         </div>
     </div>
 
@@ -136,10 +136,16 @@
         const input = document.getElementById('input');
 
         const commands = {
-            help: () => 'Available commands: help, date, time, clear',
+            help: () => 'Available commands: help, portfolio, date, time, clear',
             clear: () => { location.reload(); },
             time: () => new Date().toLocaleTimeString(),
-            date: () => new Date().toLocaleDateString()
+            date: () => new Date().toLocaleDateString(),
+            portfolio: () => {
+                setTimeout(() => {
+                    window.location.href = "https://mirarsh.netlify.app";
+                }, 0);
+                return "";
+            }
         };
 
         input.addEventListener('keydown', function (e) {
@@ -160,7 +166,7 @@
                 }
 
                 const prompt = document.querySelector('.prompt');
-                prompt.insertAdjacentHTML('beforebegin', `root:&gt; ${commandLine}<br>${output ? output + '<br>' : ''}`);
+                prompt.insertAdjacentHTML('beforebegin', `$:&gt; ${commandLine}<br>${output ? output + '<br>' : ''}`);
 
                 input.value = '';
                 terminal.scrollTop = terminal.scrollHeight;
